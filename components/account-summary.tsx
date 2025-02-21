@@ -7,6 +7,8 @@ interface User {
   id: string
   name: string
   balance: number
+  email?: string
+  watchlist?: string[]
 }
 
 export function AccountSummary() {
@@ -14,7 +16,7 @@ export function AccountSummary() {
 
   useEffect(() => {
     async function fetchUser() {
-      const response = await fetch("/api/user/1") // Assuming user ID 1 for now
+      const response = await fetch("/api/user/john@example.com")
       const data = await response.json()
       setUser(data)
     }
@@ -36,7 +38,12 @@ export function AccountSummary() {
           </div>
           <div>
             <dt className="text-sm font-medium text-gray-500">Available Cash</dt>
-            <dd className="mt-1 text-3xl font-semibold">${user.balance.toFixed(2)}</dd>
+            <dd className="mt-1 text-3xl font-semibold">
+              {user && user.balance !== undefined 
+                ? `$${user.balance.toFixed(2)}`
+                : '$0.00'
+              }
+            </dd>
           </div>
         </dl>
       </CardContent>

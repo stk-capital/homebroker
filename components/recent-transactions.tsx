@@ -18,7 +18,12 @@ export function RecentTransactions() {
 
   useEffect(() => {
     async function fetchTransactions() {
-      const response = await fetch("/api/transactions/1") // Assuming user ID 1 for now
+      const userResponse = await fetch("/api/user/john@example.com")
+      const user = await userResponse.json()
+      if (!user?.id) return
+
+      const response = await fetch(`/api/transactions/${user.id}`)
+      if (!response.ok) throw new Error("Failed to fetch transactions")
       const data = await response.json()
       setTransactions(data)
     }
@@ -41,11 +46,18 @@ export function RecentTransactions() {
               <TableHead>Price</TableHead>
               <TableHead>Total</TableHead>
             </TableRow>
-          </TableHeader>
+            </TableHeader>
           <TableBody>
-            {transactions.map((transaction) => (
+            {Array.isArray(transactions) && transactions.map((transaction) => (
               <TableRow key={transaction.id}>
-                <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  {new Date(transaction.date).toLocaleDateString('en-US', { 
+                    timeZone: 'UTC',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </TableCell>
                 <TableCell>{transaction.type}</TableCell>
                 <TableCell>{transaction.symbol}</TableCell>
                 <TableCell>{transaction.shares}</TableCell>

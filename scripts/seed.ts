@@ -1,15 +1,17 @@
+#!/usr/bin/env node
 import { MongoClient } from "mongodb"
-import { config } from "dotenv"
+import * as dotenv from "dotenv"
 
-config() // Load environment variables
+// Carrega as variáveis de ambiente do .env.local
+dotenv.config({ path: ".env.local" })
 
 const uri = process.env.MONGODB_URI
 if (!uri) {
-  throw new Error("Please add your Mongo URI to .env.local")
+  throw new Error("Please define MONGODB_URI in .env.local")
 }
 
 async function seed() {
-  const client = new MongoClient(uri)
+  const client = new MongoClient(uri as string)
 
   try {
     await client.connect()

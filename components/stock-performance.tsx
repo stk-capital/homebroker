@@ -26,8 +26,8 @@ export function StockPerformance() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [dateRange, setDateRange] = useState({
-    from: new Date("2025-02-14"),
-    to: new Date("2025-02-21"),
+    from: new Date(Date.UTC(2025, 1, 14)),
+    to: new Date(Date.UTC(2025, 1, 21)),
   })
 
   useEffect(() => {
@@ -54,9 +54,19 @@ export function StockPerformance() {
       setLoading(true)
       setError(null)
       try {
-        const fromDate = dateRange.from.toISOString().split("T")[0]
-        const toDate = dateRange.to.toISOString().split("T")[0]
-        const response = await fetch(`/api/stock-performance/${symbol}?from=${fromDate}&to=${toDate}`)
+        const formattedFrom = dateRange.from.toLocaleDateString('en-US', {
+          timeZone: 'UTC',
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        })
+        const formattedTo = dateRange.to.toLocaleDateString('en-US', {
+          timeZone: 'UTC', 
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        })
+        const response = await fetch(`/api/stock-performance/${symbol}?from=${formattedFrom}&to=${formattedTo}`)
         if (!response.ok) throw new Error("Failed to fetch stock data")
         const data = await response.json()
         if (data.length === 0) {
