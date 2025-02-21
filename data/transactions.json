@@ -1,0 +1,21 @@
+[
+  {
+    "id": "1",
+    "userId": "1",
+    "type": "BUY",
+    "symbol": "AAPL",
+    "shares": 10,
+    "price": 150.25,
+    "date": "2023-05-01T10:30:00Z"
+  },
+  {
+    "id": "2",
+    "userId": "1",
+    "type": "SELL",
+    "symbol": "GOOGL",
+    "shares": 5,
+    "price": 2755.5,
+    "date": "2023-05-02T14:45:00Z"
+  }
+]
+
